@@ -18,15 +18,25 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
 });
 
-Route::post('login', 'API\PassportController@login');
-Route::group(['middleware' => 'auth:api'], function(){
-	Route::post('register', 'API\PassportController@register');
-	Route::post('get-details', 'API\PassportController@getDetails');
-});
-	
-Route::get('clientes', 'ClienteController@index');
+Route::post('login', 'API\V1\PassportController@login');
 
-Route::get('clientes/{cliente}', 'ClienteController@show');
-Route::post('clientes', 'ClienteController@store');
-Route::put('clientes/{cliente}', 'ClienteController@update');
-Route::delete('clientes/{cliente}', 'ClienteController@delete');
+Route::group(['prefix' => '/v1', 'namespace' => 'Api\V1'], function(){
+	Route::get('clientes', 'ClienteController@index');
+	Route::get('clientes/{cliente}', 'ClienteController@show');
+	Route::post('clientes', 'ClienteController@store');
+	Route::put('clientes/{cliente}', 'ClienteController@update');
+	Route::delete('clientes/delete/{cliente}', 'ClienteController@delete');
+
+	Route::post('register', 'PassportController@register');
+	Route::post('get-details', 'PassportController@getDetails');
+});
+
+
+Route::group(['prefix' => '/v1', 'namespace' => 'Api\V1', 'as' => 'api.'], function () {
+    Route::resource('clientes', 'ClientesController', ['except' => ['create', 'edit']]);
+});
+
+	
+
+
+

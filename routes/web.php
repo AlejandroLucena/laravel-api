@@ -12,5 +12,17 @@
 */
 
 Route::get('/', function () {
-    return view('welcome');
+    return view('home');
 });
+
+Route::get('/', 'HomeController@index')->name('home');
+Route::get('/buscador','ChatBotController@index');
+
+Auth::routes();
+
+Route::resource('clientes', 'ClientesController');
+Route::resource('users', 'UserController');
+
+Auth::routes();
+
+Route::get('/home', 'HomeController@index')->name('home');
